@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Kinect Security System</title>
+	<style type="text/css">
+body {
+	font-family: sans-serif;
+}
+
+.image {
+	border: 2px solid grey;
+	background-color: black;
+	color: white;
+	padding: 10px;
+	margin: 5px;
+	text-align: center;
+	font-weight: bold;
+	display: inline-block;
+}
+
+.image img {
+	float: center;
+}
+
+.state {
+	font-size: 150%;
+}
+	</style>
+	<script type="text/javascript" src="/jquery.js">
+	</script>
+	<script type="text/javascript">
+		function update_state() {
+			$("#state").load("/state", null, function(responseText){
+				setTimeout(update_state, 3000);
+			});
+        }
+		$(document).ready(function(){
+			update_state();
+		});
+		function setstate(state) {
+			jQuery.ajax("/setstate?" + state)
+		}
+	</script>
+</head>
+<body>
+	<div class="state">State: <b id="state">Loading...</b></div>
+	<div class="Buttons">Actions:
+		<form action="#">
+			<input type="button" onclick="setstate('disarmed')" value="Disarm">
+			<input type="button" onclick="setstate('arming')" value="Arm">
+			<input type="button" onclick="setstate('alarm')" value="Alarm">
+			<input type="button" onclick="setstate('silenced')" value="Silence">
+		</form>
+	<div class="images">
+		<div class="image">
+			<img src="/video" width="480" height="360"><br>
+			Video
+		</div>
+		<div class="image">
+			<img src="/depth" width="480" height="360"><br>
+			Depth
+		</div>
+	</div>
+</body>
